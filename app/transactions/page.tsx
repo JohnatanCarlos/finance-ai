@@ -1,5 +1,7 @@
+import { Button } from "../_components/ui/button";
+
 const Transactions = () => {
-    return <h1>transaction page</h1>
-}
+  return <Button>Hello world</Button>;
+};
 
 export default Transactions;

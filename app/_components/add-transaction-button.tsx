@@ -44,22 +44,27 @@ import {
 } from "../_constants/transactions";
 import { DatePicker } from "./ui/data-picker";
 import { addTransaction } from "../_actions/add-transaction";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
     message: "O name é obrigatório.",
   }),
-  amount: z.number().min(1, {
-    message: "O valor é obrigatório.",
-  }),
+  amount: z
+    .number({
+      required_error: "O valor deve ser obrigatório",
+    })
+    .positive({
+      message: "O valor deve ser positivo.",
+    }),
   type: z.nativeEnum(TransactionType, {
-    required_error: "O tipo é obrigatorio",
+    required_error: "O tipo é obrigatório",
   }),
   category: z.nativeEnum(TransactionCategory, {
-    required_error: "O categoria é obrigatoria",
+    required_error: "O categoria é obrigatória",
   }),
   paymentMethod: z.nativeEnum(TransactionPaymentMethod, {
-    required_error: "O método de pagamento é obrigatorio",
+    required_error: "O método de pagamento é obrigatório",
   }),
   date: z.date({
     required_error: "A data é obrigatória",
@@ -69,6 +74,8 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 const AddTransactionButton = () => {
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+
   // 1. Define your form.
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -86,6 +93,8 @@ const AddTransactionButton = () => {
     try {
       console.log(data);
       await addTransaction(data);
+      setDialogIsOpen(false);
+      form.reset();
     } catch (error) {
       console.error(error);
     }
@@ -93,7 +102,9 @@ const AddTransactionButton = () => {
 
   return (
     <Dialog
+      open={dialogIsOpen}
       onOpenChange={(open) => {
+        setDialogIsOpen(open);
         if (!open) {
           form.reset();
         }

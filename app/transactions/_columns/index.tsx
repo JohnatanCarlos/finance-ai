@@ -47,7 +47,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     accessorKey: "amount",
     header: "Valor",
     cell: ({ row: { original: transaction } }) => {
-      new Intl.NumberFormat("pt-BR", {
+      return new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
       }).format(Number(transaction.amount));

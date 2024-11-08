@@ -43,12 +43,13 @@ import {
   TRANSACTION_TYPE_OPTIONS,
 } from "../_constants/transactions";
 import { DatePicker } from "./ui/data-picker";
+import { addTransaction } from "../_actions/add-transaction";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
     message: "O name é obrigatório.",
   }),
-  amount: z.string().trim().min(1, {
+  amount: z.number().min(1, {
     message: "O valor é obrigatório.",
   }),
   type: z.nativeEnum(TransactionType, {
@@ -72,7 +73,7 @@ const AddTransactionButton = () => {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: "",
+      amount: 0,
       category: TransactionCategory.OTHER,
       date: new Date(),
       name: "",
@@ -81,8 +82,13 @@ const AddTransactionButton = () => {
     },
   });
 
-  const onSubmit = (data: FormSchema) => {
-    console.log(data);
+  const onSubmit = async (data: FormSchema) => {
+    try {
+      console.log(data);
+      await addTransaction(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -128,7 +134,14 @@ const AddTransactionButton = () => {
                 <FormItem>
                   <FormLabel>Valor</FormLabel>
                   <FormControl>
-                    <MoneyInput placeholder="Digite um valor..." {...field} />
+                    <MoneyInput
+                      placeholder="Digite um valor..."
+                      onValueChange={({ floatValue }) =>
+                        field.onChange(floatValue)
+                      }
+                      onBlur={field.onBlur}
+                      disabled={field.disabled}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

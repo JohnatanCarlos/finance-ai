@@ -5,7 +5,7 @@ import AddTransactionButton from "../_components/add-transaction-button";
 
 const Transactions = async () => {
   // acessar as transacoes do meu banco
-  const transations = await db.transaction.findMany({});
+  const transactions = await db.transaction.findMany({});
 
   return (
     <div className="space-y-6 p-6">
@@ -14,7 +14,10 @@ const Transactions = async () => {
         <AddTransactionButton />
       </div>
 
-      <DataTable columns={transactionColumns} data={transations} />
+      <DataTable
+        columns={transactionColumns}
+        data={JSON.parse(JSON.stringify(transactions))}
+      />
       <div></div>
     </div>
   );

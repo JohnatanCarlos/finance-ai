@@ -36,7 +36,7 @@ export const TRANSACTION_TYPE_OPTIONS = [
     label: "Despesa",
   },
   {
-    value: TransactionType.INVESTIMENT,
+    value: TransactionType.INVESTMENT,
     label: "Investimento",
   },
 ];

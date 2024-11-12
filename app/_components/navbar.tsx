@@ -8,6 +8,10 @@ import { usePathname } from "next/navigation";
 const NavBar = () => {
   const pathName = usePathname();
 
+  if (pathName === "/login") {
+    return;
+  }
+
   return (
     <nav className="flex items-center justify-between border-b border-solid px-8 py-4">
       <div className="flex items-center gap-10">

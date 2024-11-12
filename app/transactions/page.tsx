@@ -18,7 +18,6 @@ const Transactions = async () => {
         columns={transactionColumns}
         data={JSON.parse(JSON.stringify(transactions))}
       />
-      <div></div>
     </div>
   );
 };

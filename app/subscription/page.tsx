@@ -1,16 +1,18 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader } from "../_components/ui/card";
-import { Badge, CheckIcon, XIcon } from "lucide-react";
+import { CheckIcon, XIcon } from "lucide-react";
 import AcquirePlanButton from "./_components/acquire-plan-button";
+import { Badge } from "../_components/ui/badge";
 
 const Subscriton = async () => {
   const { userId } = await auth();
   if (!userId) {
     redirect("/login");
   }
-  // const user = await clerkClient().users.getUser(userId);
-  // const currentMonthTransactions = await getCurrentMonthTransactions();
+
+  const user = await clerkClient().users.getUser(userId);
+  const hasPremiumPlan = user.publicMetadata.subscriptionPlan == "premium";
 
   return (
     <div className="flex-col space-y-6 p-6">
@@ -40,16 +42,20 @@ const Subscriton = async () => {
 
         <Card className="w-[450px]">
           <CardHeader className="relative border-b border-solid py-8">
-            <Badge className="absolute left-4 top-12 bg-primary/10 text-primary">
-              Ativo
-            </Badge>
+            {hasPremiumPlan && (
+              <Badge className="absolute left-4 top-12 bg-primary/10 text-primary">
+                Ativo
+              </Badge>
+            )}
 
             <h2 className="text-center text-2xl font-semibold">
               Plano Premium
             </h2>
             <div className="flex items-center justify-center gap-3">
               <span className="text-4xl">R$</span>
-              <span className="text-6xl font-semibold">19</span>
+              <span className="text-6xl font-semibold">
+                9,<span className="align-text-top text-sm">90</span>
+              </span>
               <div className="text-2xl text-muted-foreground">/mês</div>
             </div>
           </CardHeader>

@@ -1,11 +1,14 @@
 import AddTransactionButton from "@/app/_components/add-transaction-button";
+import ShowExtract from "@/app/_components/show-extract";
 import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
+import { TransactionType } from "@prisma/client";
 import { ReactNode } from "react";
 
 interface SummaryCardProp {
   icon: ReactNode;
   title: string;
   amount: number;
+  type?: TransactionType;
   size?: "small" | "large";
   userCanAddTransaction?: boolean;
 }
@@ -14,6 +17,7 @@ const SummaryCard = ({
   icon,
   title,
   amount,
+  type,
   size = "small",
   userCanAddTransaction,
 }: SummaryCardProp) => {
@@ -42,6 +46,8 @@ const SummaryCard = ({
             userCanAddTransaction={userCanAddTransaction as boolean}
           />
         )}
+
+        {type && <ShowExtract type={type} />}
       </CardContent>
     </Card>
   );

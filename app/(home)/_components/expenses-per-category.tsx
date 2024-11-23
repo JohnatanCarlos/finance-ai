@@ -1,3 +1,4 @@
+import InformativeNotResult from "@/app/_components/informative-not-result";
 import { CardContent, CardHeader, CardTitle } from "@/app/_components/ui/card";
 import { Progress } from "@/app/_components/ui/progress";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
@@ -28,6 +29,13 @@ const ExpensesPerCategory = ({
             <Progress value={category.percentageOfTotal} />
           </div>
         ))}
+
+        {!expensesPerCategory.length && (
+          <InformativeNotResult
+            message="Quando identificarmos um gasto, iremos informá-lo"
+            emoji="&#128521;"
+          />
+        )}
       </CardContent>
     </ScrollArea>
   );

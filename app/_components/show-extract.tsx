@@ -21,6 +21,7 @@ import Image from "next/image";
 import { Skeleton } from "./ui/skeleton";
 import { ScrollArea } from "./ui/scroll-area";
 import { Separator } from "./ui/separator";
+import InformativeNotResult from "./informative-not-result";
 
 interface ShowExtractProps {
   type: TransactionType;
@@ -143,9 +144,10 @@ const ShowExtract = ({ type }: ShowExtractProps) => {
               ))}
 
             {!loading && !allTransaction.length && (
-              <p className="text-center text-white">
-                Não encontramos nenhum resultado!
-              </p>
+              <InformativeNotResult
+                message="Não encontramos nenhum resultado"
+                emoji="&#128270;"
+              />
             )}
           </div>
         </ScrollArea>

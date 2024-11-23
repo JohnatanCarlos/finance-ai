@@ -19,6 +19,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -41,6 +42,10 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { upsertTransaction } from "../_actions/upsert-transaction";
+import { Checkbox } from "./ui/checkbox";
+import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
+import { toast } from "sonner";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
@@ -63,9 +68,11 @@ const formSchema = z.object({
   paymentMethod: z.nativeEnum(TransactionPaymentMethod, {
     required_error: "O método de pagamento é obrigatório",
   }),
-  date: z.date({
-    required_error: "A data é obrigatória",
-  }),
+  date: z.preprocess(
+    (val) => (typeof val === "string" ? new Date(val) : val),
+    z.date({ required_error: "A data é obrigatória." }),
+  ),
+  fixed: z.boolean(),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -76,7 +83,9 @@ const UpsertTransactionDialog = ({
   defaultValues,
   transactionId,
 }: UpsertTransactionDialogProps) => {
+  console.log(defaultValues);
   // 1. Define your form.
+  const [upsertIsLoading, setUpsertIsLoading] = useState(false);
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues ?? {
@@ -86,17 +95,27 @@ const UpsertTransactionDialog = ({
       name: "",
       paymentMethod: TransactionPaymentMethod.PIX,
       type: TransactionType.EXPENSE,
+      fixed: false,
     },
   });
 
   const onSubmit = async (data: FormSchema) => {
     try {
       console.log(data);
+      setUpsertIsLoading(true);
       await upsertTransaction({ ...data, id: transactionId });
       setIsOpen(false);
       form.reset();
+      toast.success(
+        `Transação ${isUpdate ? "atualizada" : "cadastrada"} com sucesso!`,
+      );
     } catch (error) {
+      toast.error(
+        `Ocorreu um erro ao ${isUpdate ? "atualizar" : "cadastrar"} a transação...`,
+      );
       console.error(error);
+    } finally {
+      setUpsertIsLoading(false);
     }
   };
 
@@ -131,7 +150,16 @@ const UpsertTransactionDialog = ({
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <Input placeholder="Digite o nome..." {...field} />
+                    <Input
+                      placeholder="Digite o nome..."
+                      {...field}
+                      onChange={(e) => {
+                        const value = e.target.value
+                          .toLowerCase()
+                          .replace(/\b\w/g, (char) => char.toUpperCase());
+                        field.onChange(value);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -241,6 +269,26 @@ const UpsertTransactionDialog = ({
             />
             <FormField
               control={form.control}
+              name="fixed"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Transação fixa?</FormLabel>
+                    <FormDescription>
+                      Transação com valores fixos e recorrentes todos os meses.
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="date"
               render={({ field }) => (
                 <FormItem>
@@ -258,6 +306,7 @@ const UpsertTransactionDialog = ({
               </DialogClose>
               <Button type="submit">
                 {isUpdate ? "Atualizar" : "Adicionar"}
+                {upsertIsLoading && <Loader2Icon className="animate-spin" />}
               </Button>
             </DialogFooter>
           </form>

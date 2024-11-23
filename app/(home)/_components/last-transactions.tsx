@@ -7,6 +7,8 @@ import Image from "next/image";
 import { formatCurrency } from "@/app/_utils/currency";
 import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@/app/_constants/transactions";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import { Separator } from "@/app/_components/ui/separator";
+import InformativeNotResult from "@/app/_components/informative-not-result";
 
 interface LastTransactionsProps {
   lastTransactions: Transaction[];
@@ -42,6 +44,8 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
         </Button>
       </CardHeader>
       <CardContent className="space-y-6">
+        <Separator orientation="horizontal" />
+
         {lastTransactions.map((transaction) => (
           <div
             key={transaction.id}
@@ -73,6 +77,13 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
             </p>
           </div>
         ))}
+
+        {!lastTransactions.length && (
+          <InformativeNotResult
+            message="Realize sua primeira transação do mês"
+            emoji="&#128178;"
+          />
+        )}
       </CardContent>
     </ScrollArea>
   );

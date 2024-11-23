@@ -19,7 +19,7 @@ const EditTransactionButton = ({ transaction }: EditTransactionButtonProps) => {
       <Button
         variant="ghost"
         size="icon"
-        className="text-muted-foreground"
+        className="text-muted-foreground hover:text-yellow-500"
         onClick={() => setDialogIsOpen(true)}
       >
         <PencilIcon />

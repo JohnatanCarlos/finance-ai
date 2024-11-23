@@ -63,8 +63,8 @@ const AiReportButton = ({ month }: AiReportButtonProps) => {
             onClick={handleGenerateReportClick}
             disabled={reportIsLoading}
           >
-            {reportIsLoading && <Loader2Icon className="animate-spin" />}
             Gerar Relatório
+            {reportIsLoading && <Loader2Icon className="animate-spin" />}
           </Button>
         </DialogFooter>
       </DialogContent>

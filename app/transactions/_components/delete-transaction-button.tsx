@@ -10,9 +10,10 @@ import {
   AlertDialogTrigger,
 } from "@/app/_components/ui/alert-dialog";
 import { Button } from "@/app/_components/ui/button";
-import { TrashIcon } from "lucide-react";
+import { Loader2Icon, TrashIcon } from "lucide-react";
 import { DeleteTransaction } from "../_actions/delete-transaction";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface DeleteTransactionButtonProps {
   transactionId: string;
@@ -21,21 +22,30 @@ interface DeleteTransactionButtonProps {
 const DeleteTransactionButton = ({
   transactionId,
 }: DeleteTransactionButtonProps) => {
+  const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const handleConfirmDeleteClick = async () => {
     try {
+      setDeleteIsLoading(true);
       await DeleteTransaction({ transactionId });
       toast.success("Transação deletada com sucesso!");
     } catch (error) {
       console.error(error);
-      toast.success("Ocorreu um erro!");
+      toast.error("Ocorreu um erro ao deletar a transação!");
+    } finally {
+      setDeleteIsLoading(false);
     }
   };
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="text-muted-foreground">
-          <TrashIcon />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-muted-foreground hover:text-danger"
+        >
+          {!deleteIsLoading && <TrashIcon />}
+          {deleteIsLoading && <Loader2Icon className="animate-spin" />}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

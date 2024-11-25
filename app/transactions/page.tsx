@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ScrollArea } from "../_components/ui/scroll-area";
 import canUserAddTransaction from "../_data/can-user-add-transaction";
+import Filter from "./_components/filter-transaction";
 
 const Transactions = async () => {
   // acessar as transacoes do meu banco
@@ -31,6 +32,8 @@ const Transactions = async () => {
         <h1 className="text-2xl font-bold">Transações</h1>
         <AddTransactionButton userCanAddTransaction={userAddTransaction} />
       </div>
+
+      <Filter />
 
       <ScrollArea className="h-full">
         <DataTable

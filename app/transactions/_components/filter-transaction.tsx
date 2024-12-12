@@ -107,7 +107,7 @@ const Filter = () => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a verified email to display" />
+                        <SelectValue placeholder="Selecione um Tipo da transação" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -135,7 +135,7 @@ const Filter = () => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a verified email to display" />
+                        <SelectValue placeholder="Selecione uma Categoria" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -163,7 +163,7 @@ const Filter = () => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a verified email to display" />
+                        <SelectValue placeholder="Selecione um Método de pagamento" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>

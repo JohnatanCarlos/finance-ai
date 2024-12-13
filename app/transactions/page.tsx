@@ -6,11 +6,10 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ScrollArea } from "../_components/ui/scroll-area";
 import canUserAddTransaction from "../_data/can-user-add-transaction";
-import Filter from "./_components/filter-transaction";
 
 const Transactions = async () => {
-  // acessar as transacoes do meu banco
   const { userId } = auth();
+
   if (!userId) {
     redirect("/login");
   }
@@ -33,7 +32,7 @@ const Transactions = async () => {
         <AddTransactionButton userCanAddTransaction={userAddTransaction} />
       </div>
 
-      <Filter />
+      {/* <Filter /> */}
 
       <ScrollArea className="h-full">
         <DataTable
